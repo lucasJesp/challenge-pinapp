@@ -1,6 +1,7 @@
 package com.pinapp.msvc.clientes.service;
 
 import com.pinapp.msvc.clientes.exceptions.ClienteDuplicadoException;
+import com.pinapp.msvc.clientes.exceptions.DomainException;
 import com.pinapp.msvc.clientes.models.dto.ClienteConFechaProbableMuerte;
 import com.pinapp.msvc.clientes.models.dto.ClienteKPI;
 import com.pinapp.msvc.clientes.models.entity.Cliente;
@@ -29,7 +30,7 @@ class ClienteServiceImplTest {
 
     @Test
     void deberia_guardar_cliente() {
-        Cliente cliente = new Cliente("Fernando", "Perez", 30, LocalDate.of(1993, 1, 1));
+        Cliente cliente = new Cliente("Fernando", "Perez", 31, LocalDate.of(1993, 1, 1));
 
         when(clienteRepository.findByNombreAndApellidoAndEdadAndFechaNacimiento(
                 cliente.getNombre(), cliente.getApellido(), cliente.getEdad(), cliente.getFechaNacimiento()
@@ -48,15 +49,20 @@ class ClienteServiceImplTest {
 
     @Test
     void deberia_fallar_por_cliente_duplicado() {
-        Cliente cliente = new Cliente("John", "Doe", 30, LocalDate.of(1993, 1, 1));
+        Cliente cliente = new Cliente("John", "Doe", 31, LocalDate.of(1993, 1, 1));
 
         when(clienteRepository.findByNombreAndApellidoAndEdadAndFechaNacimiento(
                 cliente.getNombre(), cliente.getApellido(), cliente.getEdad(), cliente.getFechaNacimiento()
         )).thenReturn(Optional.of(cliente));
 
-        assertThrows(ClienteDuplicadoException.class, () -> {
-            clienteService.guardar(cliente);
-        });
+        assertThrows(ClienteDuplicadoException.class, () -> clienteService.guardar(cliente));
+    }
+
+    @Test
+    void deberia_fallar_por_edad_incorrecta() {
+        Cliente cliente = new Cliente("John", "Doe", 30, LocalDate.of(1993, 1, 1));
+
+        assertThrows(DomainException.class, () -> clienteService.guardar(cliente));
     }
 
 

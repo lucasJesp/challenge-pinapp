@@ -10,12 +10,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static com.pinapp.msvc.clientes.util.Messages.CLIENTES_NO_OBTENIDOS;
 import static com.pinapp.msvc.clientes.util.Messages.CLIENTE_DUPLICADO;
+import static com.pinapp.msvc.clientes.util.Messages.EDAD_INCORRECTA;
 import static com.pinapp.msvc.clientes.util.Messages.FECHAS_PROBABLES_NO_OBTENIDAS;
 import static com.pinapp.msvc.clientes.util.Messages.KPI_NO_OBTENIDOS;
 
@@ -42,6 +44,9 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     @Transactional
     public Cliente guardar(Cliente cliente) {
+
+        validaEdad(cliente.getEdad(), cliente.getFechaNacimiento());
+
         Optional<Cliente> clienteExistente = clienteRepository.findByNombreAndApellidoAndEdadAndFechaNacimiento(
                 cliente.getNombre(), cliente.getApellido(), cliente.getEdad(), cliente.getFechaNacimiento()
         );
@@ -102,6 +107,15 @@ public class ClienteServiceImpl implements ClienteService {
             return null;
         }
         return fechaNacimiento.plusYears(80); // Suponiendo una esperanza de vida de 80 años
+    }
+
+    private void validaEdad(int edad, LocalDate fechaNacimiento) {
+
+        int edadCalculada = Period.between(fechaNacimiento, LocalDate.now()).getYears();
+
+        if (edadCalculada != edad) {
+            throw new DomainException(EDAD_INCORRECTA);
+        }
     }
 
 }

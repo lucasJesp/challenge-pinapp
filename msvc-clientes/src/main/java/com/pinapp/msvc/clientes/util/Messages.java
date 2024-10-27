@@ -11,6 +11,7 @@ public class Messages {
     public static final String CLIENTE_DUPLICADO = "El cliente ya existe con los mismos datos.";
     public static final String KPI_NO_OBTENIDOS = "No se pudieron obtener los KPI. Inténtelo más tarde.";
     public static final String FECHAS_PROBABLES_NO_OBTENIDAS = "No se pudieron obtener las fechas probables de muerte. Inténtelo más tarde.";
+    public static final String EDAD_INCORRECTA = "La edad no coincide con la fecha de nacimiento.";
 
     // ERRORES
     public static final String VALIDACION_FALLIDA = "Validación fallida.";
@@ -29,6 +30,6 @@ public class Messages {
 
     public static final String FECHA_NACIMIENTO_OBLIGATORIA = "La fecha de nacimiento es obligatoria.";
     public static final String FECHA_NACIMIENTO_PASADA = "La fecha de nacimiento debe ser una fecha pasada.";
-    public static final String FORMATO_FECHA_INVALIDO ="La fecha debe estar en el formato 'yyyy-MM-dd'.";
+    public static final String FORMATO_FECHA_INVALIDO = "La fecha debe estar en el formato 'yyyy-MM-dd'.";
 
 }
